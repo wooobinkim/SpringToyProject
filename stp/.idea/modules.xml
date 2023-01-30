@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/stp-api/stp.stp-api.main.iml" filepath="$PROJECT_DIR$/.idea/modules/stp-api/stp.stp-api.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/stp-domain/stp.stp-domain.main.iml" filepath="$PROJECT_DIR$/.idea/modules/stp-domain/stp.stp-domain.main.iml" />
     </modules>
   </component>
 </project>
