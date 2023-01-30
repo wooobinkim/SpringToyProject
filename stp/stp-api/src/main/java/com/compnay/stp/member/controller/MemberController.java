@@ -1,14 +1,12 @@
 package com.compnay.stp.member.controller;
 
 import com.compnay.stp.member.request.MemberCreateRequest;
+import com.compnay.stp.member.request.MemberLoginRequest;
 import com.compnay.stp.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/api/member")
 @RestController
@@ -21,5 +19,12 @@ public class MemberController {
         memberService.signIn(memberCreateRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PostMapping ("/login")
+    public ResponseEntity<?> login(@RequestBody MemberLoginRequest memberLoginRequest){
+        memberService.login(memberLoginRequest);
+
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

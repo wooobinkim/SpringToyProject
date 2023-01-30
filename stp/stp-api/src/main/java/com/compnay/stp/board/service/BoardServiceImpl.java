@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -20,7 +22,8 @@ public class BoardServiceImpl implements BoardService{
     @Override
     @Transactional
     public void createBoard(BoardCreateRequest boardCreateRequest) {
-        Member member = memberRepository.findById(1L).orElseThrow();
+        Optional<Member> optionalMember = memberRepository.findById(1L);
+        Member member = optionalMember.get();
 
         Board board = Board.create(boardCreateRequest.getSubject(), boardCreateRequest.getContents(), member);
         boardRepository.save(board);
@@ -29,7 +32,7 @@ public class BoardServiceImpl implements BoardService{
     @Override
     @Transactional
     public void updateBoard(Long id, BoardUpdateRequest boardUpdateRequest) {
-        Board board = boardRepository.findById(id).orElseThrow();
+        Board board = boardRepository.findById(id).get();
         board.update(boardUpdateRequest.getSubject(), boardUpdateRequest.getContents());
     }
 }

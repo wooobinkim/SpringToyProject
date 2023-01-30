@@ -17,8 +17,11 @@ public class JwtUtil {
     @Value("${token.secret}")
     private String secretKey;
 
+    @Value("${token.access_token.expiration_time}")
+    private String expirationTime;
+
     //회원가입시 토큰생성
-    public String createToken(Long userId, String role, String expirationTime){
+    public String createToken(Long userId, String role){
         Date now = new Date();
         return Jwts.builder()
                 .setSubject(String.valueOf(userId))
