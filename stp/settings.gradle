@@ -1,1 +1,4 @@
 rootProject.name = 'stp'
+include 'stp-api'
+include 'stp-domain'
+
