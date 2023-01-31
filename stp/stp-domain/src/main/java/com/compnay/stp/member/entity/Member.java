@@ -19,11 +19,11 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private Long memberId;
-
     private String siteId;
     private String sitePwd;
     private String name;
     private String age;
+    private String role;
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Board> boardList = new ArrayList<>();
@@ -34,6 +34,7 @@ public class Member {
         member.sitePwd = sitePwd;
         member.name = name;
         member.age = age;
+        member.role = "USER";
 
         return member;
     }

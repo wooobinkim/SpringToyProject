@@ -21,8 +21,8 @@ public class BoardServiceImpl implements BoardService{
     private final MemberRepository memberRepository;
     @Override
     @Transactional
-    public void createBoard(BoardCreateRequest boardCreateRequest) {
-        Optional<Member> optionalMember = memberRepository.findById(1L);
+    public void createBoard(BoardCreateRequest boardCreateRequest, Long memberId) {
+        Optional<Member> optionalMember = memberRepository.findById(memberId);
         Member member = optionalMember.get();
 
         Board board = Board.create(boardCreateRequest.getSubject(), boardCreateRequest.getContents(), member);

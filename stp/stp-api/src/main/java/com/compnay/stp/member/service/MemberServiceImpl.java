@@ -25,12 +25,18 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public void login(MemberLoginRequest memberLoginRequest) {
+    public String login(MemberLoginRequest memberLoginRequest) {
+        System.out.println("로그인 서비스 들어옴");
         Member member = memberRepository.findBySiteId(memberLoginRequest.getSiteId());
 
-        if(member.getSitePwd() != memberLoginRequest.getSitePwd()) System.out.println("예외");
+        if(!member.getSitePwd().equals(memberLoginRequest.getSitePwd())) System.out.println("비밀번호틀림");
+        else {
+            String accessToken = jwtUtil.createToken(member.getMemberId(), member.getRole());
+            System.out.println("토큰생성완료 -> " + accessToken);
 
-        String accessToken = jwtUtil.createToken(member.getMemberId(), "USER");
-        System.out.println(accessToken);
+            return accessToken;
+        }
+
+        return null;
     }
 }

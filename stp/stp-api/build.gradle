@@ -15,5 +15,8 @@ dependencies {
     // jwt
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
 
+    //자바11버전부터 발생하는 bean 등록문제 해결
+//    implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
+
     implementation(project(":stp-domain"))
 }

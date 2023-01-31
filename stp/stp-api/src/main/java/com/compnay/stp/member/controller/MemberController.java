@@ -23,8 +23,9 @@ public class MemberController {
 
     @PostMapping ("/login")
     public ResponseEntity<?> login(@RequestBody MemberLoginRequest memberLoginRequest){
-        memberService.login(memberLoginRequest);
+        System.out.println("로그인 컨트롤러 들어옴");
+        String token = memberService.login(memberLoginRequest);
 
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.OK).header("AccessToken",token).build();
     }
 }
