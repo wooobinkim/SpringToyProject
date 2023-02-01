@@ -3,6 +3,9 @@ package com.compnay.stp.security.config;
 import com.compnay.stp.security.filter.JwtAuthenticationFilter;
 import com.compnay.stp.security.handler.CustomAccessDeniedHandler;
 import com.compnay.stp.security.handler.CustomAuthenticationEntryPoint;
+import com.compnay.stp.security.handler.OAuthAuthenticationFailureHandler;
+import com.compnay.stp.security.handler.OAuthAuthenticationSuccessHandler;
+import com.compnay.stp.security.service.OAuth2UserService;
 import com.compnay.stp.security.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +18,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
@@ -23,6 +29,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CustomAccessDeniedHandler accessDeniedHandler;
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
+    private final OAuth2UserService oAuth2UserService;
+    private final OAuthAuthenticationSuccessHandler oAuthAuthenticationSuccessHandler;
+    private final OAuthAuthenticationFailureHandler oAuthAuthenticationFailureHandler;
 
 //    @Bean
 //    @Override
@@ -40,22 +49,44 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         System.out.println("Security Config에 들어옴");
         http
                 .httpBasic().disable()
+                .cors().configurationSource(corsConfigurationSource())
+                .and()
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-//                .antMatchers("/ws-stomp/**", "/api/port", "/actuator/health", "/oauth2/**", "/api/docs/**", "/docs/**").permitAll()
+                .antMatchers("/ws-stomp/**", "/api/port", "/actuator/health", "/oauth2/**", "/api/docs/**", "/docs/**").permitAll()
+//                .antMatchers(HttpMethod.GET, "/login/oauth2/code/google").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/member/signin", "/api/member/login").permitAll()
-                .anyRequest().hasRole("USER")
+//                .anyRequest().hasRole("USER")
                 .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(authenticationEntryPoint)
                 .accessDeniedHandler(accessDeniedHandler)
                 .and()
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .oauth2Login()
+                .userInfoEndpoint()
+                .userService(oAuth2UserService)
+                .and()
+                .successHandler(oAuthAuthenticationSuccessHandler)
+                .failureHandler(oAuthAuthenticationFailureHandler);
 
     }
 
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        configuration.addAllowedOriginPattern("*");
+        configuration.addAllowedHeader("*");
+        configuration.addAllowedMethod("*");
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 
 
 }

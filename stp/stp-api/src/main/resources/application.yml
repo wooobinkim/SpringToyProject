@@ -3,6 +3,7 @@ spring:
     active: local
     include:
       - domain
+      - oauth
 token:
   access_token:
     expiration_time: 604800000 #30일

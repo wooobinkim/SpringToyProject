@@ -1,5 +1,6 @@
 package com.compnay.stp.security.util;
 
+import com.compnay.stp.member.Role;
 import com.compnay.stp.security.service.CustomUserDetailService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -32,7 +33,7 @@ public class JwtUtil {
     private final CustomUserDetailService userDetailsService;
 
     //회원가입시 토큰생성
-    public String createToken(Long userId, String role){
+    public String createToken(Long userId, Role role){
         System.out.println("createToken 들어옴");
         System.out.println("userId = " + userId);
         System.out.println("role = " + role);
